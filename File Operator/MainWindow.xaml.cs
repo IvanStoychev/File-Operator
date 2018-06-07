@@ -25,7 +25,12 @@ namespace File_Operator
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnOperate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnFindInFiles_Click(object sender, RoutedEventArgs e)
         {
 
         }
