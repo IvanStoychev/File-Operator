@@ -3,29 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModel = "clr-namespace:File_Operator.ViewModel"
         xmlns:local="clr-namespace:File_Operator"
         mc:Ignorable="d"
+        DataContext="ViewModel"
         Title="MainWindow" Height="450" Width="800">
-    <UserControl.DataContext>
-        <viewModel:ViewModel/>
-    </UserControl.DataContext>
     <Grid>
         <ToolBarPanel VerticalAlignment="Top">
             <ToolBarTray>
-                <ToolBar>
-                    <Button
-                        Click="btnFindInFiles_Click"
-                        Height="30"
-                        Name="btnFindInFiles"
-                        Width="30">
-                        <Image Source="Resources\FindInFiles.png"/>
-                    </Button>
-                </ToolBar>
+                <ToolBar/>
             </ToolBarTray>
         </ToolBarPanel>
         <Button
             Click="btnOperate_Click"
+            Command="{Binding OperateCommand}"
             Content="Operate"
             HorizontalAlignment="Center"
             Margin="0,385,0,0"
