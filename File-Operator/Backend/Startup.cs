@@ -1,5 +1,4 @@
-﻿using Backend.Option_models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 
 namespace Backend
@@ -14,11 +13,6 @@ namespace Backend
         /// </summary>
         internal static void InitConfig()
         {
-            var databaseParameters = DatabaseParameters.instance;
-
-            IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
-            configuration.GetSection(nameof(DatabaseParameters)).Bind(databaseParameters);
-
             SetupShutdownHooks();
         }
 
