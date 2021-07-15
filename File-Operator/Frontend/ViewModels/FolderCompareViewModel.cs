@@ -1,6 +1,11 @@
-﻿using Frontend.Utility;
+﻿using Backend;
+using Frontend.Utility;
+using System;
 using System.ComponentModel;
+using System.Text;
+using IvanStoychev.StringExtensions;
 using System.Windows.Forms;
+using Shell32;
 
 namespace Frontend.ViewModels
 {
@@ -8,6 +13,13 @@ namespace Frontend.ViewModels
     {
         string sourceFolderPath;
         string targetFolderPath;
+        string sourceResults;
+        string targetResults;
+        readonly Shell shell = new();
+        readonly FolderBrowserDialog sourceFolderBrowser = new();
+        readonly FolderBrowserDialog targetFolderBrowser = new();
+
+        public int Hwnd { get; private set; }
 
         public string SourceFolderPath
         {
@@ -35,6 +47,32 @@ namespace Frontend.ViewModels
             }
         }
 
+        public string SourceResults
+        {
+            get => sourceResults;
+            set
+            {
+                if (sourceResults != value)
+                {
+                    sourceResults = value;
+                    OnPropertyChanged("SourceResults");
+                }
+            }
+        }
+
+        public string TargetResults
+        {
+            get => targetResults;
+            set
+            {
+                if (targetResults != value)
+                {
+                    targetResults = value;
+                    OnPropertyChanged("TargetResults");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -47,32 +85,60 @@ namespace Frontend.ViewModels
             BrowseSourceFolderCommand = new RelayCommand(OnBrowseSourceFolderCommand);
             BrowseTargetFolderCommand = new RelayCommand(OnBrowseTargetFolderCommand);
             CompareFoldersCommand = new RelayCommand(OnCompareFoldersCommand, CanCompareFoldersCommand);
+
+            sourceFolderBrowser.Description = "Select source folder";
+            sourceFolderBrowser.UseDescriptionForTitle = true;
+            sourceFolderBrowser.ShowNewFolderButton = false;
+            targetFolderBrowser.Description = "Select target folder";
+            targetFolderBrowser.UseDescriptionForTitle = true;
+            targetFolderBrowser.ShowNewFolderButton = false;
         }
 
         void OnBrowseSourceFolderCommand()
         {
-            FolderBrowserDialog sourceFolderBrowser = new();
-            sourceFolderBrowser.Description = "desc";
-            sourceFolderBrowser.ShowNewFolderButton = false;
-            if (sourceFolderBrowser.ShowDialog() == DialogResult.OK)
-            {
-                SourceFolderPath = sourceFolderBrowser.SelectedPath;
-            }
+            //if (sourceFolderBrowser.ShowDialog() == DialogResult.OK)
+            //    SourceFolderPath = sourceFolderBrowser.SelectedPath;
+
+            SourceFolderPath = ShellBrowseForFolder()?.Path;
         }
 
         void OnBrowseTargetFolderCommand()
         {
-            throw new System.NotImplementedException();
+            //if (targetFolderBrowser.ShowDialog() == DialogResult.OK)
+            //    TargetFolderPath = targetFolderBrowser.SelectedPath;
+
+            TargetFolderPath = ShellBrowseForFolder()?.Path;
         }
 
         void OnCompareFoldersCommand()
         {
-            throw new System.NotImplementedException();
+            var diffData = new LogisEngine().CompareFilesInFolders(SourceFolderPath, TargetFolderPath);
+
+            string sourceResults = diffData.MissingDirectoriesText + Environment.NewLine + diffData.MissingFilesText;
+            string targetResults = diffData.ExtraDirectoriesText + Environment.NewLine + diffData.ExtraFilesText;
+            SourceResults = sourceResults.TrimStart(Environment.NewLine).TrimEnd(Environment.NewLine);
+            TargetResults = targetResults.TrimStart(Environment.NewLine).TrimEnd(Environment.NewLine);
         }
 
         bool CanCompareFoldersCommand()
         {
-            throw new System.NotImplementedException();
+            return true;
+        }
+
+        /// <summary>
+        /// Uses Shell32 to open a "folder browser" dialog and returns the selected folder.
+        /// </summary>
+        /// <returns></returns>
+        FolderItem ShellBrowseForFolder()
+        {
+            Folder folder = shell.BrowseForFolder(Hwnd, "", 0, 0);
+            if (folder != null)
+            {
+                FolderItem fi = (folder as Folder3).Self;
+                return fi;
+            }
+
+            return null;
         }
     }
 }

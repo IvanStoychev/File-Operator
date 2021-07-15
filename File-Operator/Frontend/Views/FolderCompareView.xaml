@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Frontend.Views"
+             xmlns:utility="clr-namespace:Frontend.Utility"
              mc:Ignorable="d" 
+             utility:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,28 +14,37 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
         <!-- Column 0 -->
-        <Label Content="Source directory"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <TextBox Text="{Binding SourceFolderPath}"/>
-            <Button Content="..." Command="{Binding BrowseSourceFolderCommand}"/>
-        </StackPanel>
-        <TextBlock Grid.Row="2"/>
+        <Label Content="Source directory" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding SourceFolderPath}" Height="20" Margin="10,0"/>
+            <Button Content="..." VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding BrowseSourceFolderCommand}" Grid.Column="1" Margin="0,3" Width="30"/>
+        </Grid>
+        <TextBox Text="{Binding SourceResults}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Grid.Row="2" Grid.Column="0" Margin="10,5,10,0"/>
         <!-- Column 0 -->
 
         <!-- Column 1 -->
-        <Label Content="Source directory" Grid.Column="1"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-            <TextBox Text="{Binding TargetFolderPath}"/>
-            <Button Content="..." Command="{Binding BrowseTargetFolderCommand}"/>
-        </StackPanel>
-        <TextBlock Grid.Column="1" Grid.Row="2"/>
+        <Label Content="Target directory" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding TargetFolderPath}" Height="20" Margin="10,0"/>
+            <Button Content="..." VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding BrowseTargetFolderCommand}" Grid.Column="1" Margin="0,3" Width="30"/>
+        </Grid>
+        <TextBox Text="{Binding TargetResults}" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Grid.Row="2" Grid.Column="1" Margin="10,5,10,0"/>
         <!-- Column 1 -->
 
-        <Button Content="Compare" Command="{Binding CompareFoldersCommand}"/>
+        <Button Content="Compare" Command="{Binding CompareFoldersCommand}" Grid.Row="3" Grid.ColumnSpan="2" Margin="15" Width="60"/>
     </Grid>
 </UserControl>
