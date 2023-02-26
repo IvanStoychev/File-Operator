@@ -96,18 +96,18 @@ namespace Frontend.ViewModels
 
         void OnBrowseSourceFolderCommand()
         {
-            //if (sourceFolderBrowser.ShowDialog() == DialogResult.OK)
-            //    SourceFolderPath = sourceFolderBrowser.SelectedPath;
+            if (sourceFolderBrowser.ShowDialog() == DialogResult.OK)
+                SourceFolderPath = sourceFolderBrowser.SelectedPath;
 
-            SourceFolderPath = ShellBrowseForFolder()?.Path;
+            //SourceFolderPath = ShellBrowseForFolder()?.Path;
         }
 
         void OnBrowseTargetFolderCommand()
         {
-            //if (targetFolderBrowser.ShowDialog() == DialogResult.OK)
-            //    TargetFolderPath = targetFolderBrowser.SelectedPath;
+            if (targetFolderBrowser.ShowDialog() == DialogResult.OK)
+                TargetFolderPath = targetFolderBrowser.SelectedPath;
 
-            TargetFolderPath = ShellBrowseForFolder()?.Path;
+            //TargetFolderPath = ShellBrowseForFolder()?.Path;
         }
 
         void OnCompareFoldersCommand()
